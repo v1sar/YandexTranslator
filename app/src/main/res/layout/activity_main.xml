@@ -1,44 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:padding="16dp">
-    <ImageView
-        android:id="@+id/switch_language"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_media_ff"
-        android:layout_centerHorizontal="true"/>
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/left_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/languages"
-        android:layout_toLeftOf="@id/switch_language"/>
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/right_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/languages"
-        android:layout_toRightOf="@id/switch_language"/>
-    <EditText
-        android:id="@+id/text_to_translate"
+<RelativeLayout android:id="@+id/main_layout"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:lines="4"
-        android:gravity="start"
-        android:background="@drawable/text_to_translate_border"
-        android:hint="@string/hint_to_translate"
-        android:padding="8dp"
-        android:layout_below="@id/switch_language"/>
-    <Button
-        android:id="@+id/btn_translate"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextColor="#000000" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_to_translate"/>
-    <TextView
-        android:id="@+id/txt_translated"
+        android:layout_below="@+id/toolbar"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:tabTextColor="#000000"
+        app:tabSelectedTextColor="#000000"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btn_translate"/>
+        android:layout_height="fill_parent"
+        android:layout_below="@id/tab_layout"/>
+
 </RelativeLayout>

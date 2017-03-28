@@ -23,7 +23,17 @@ public class LanguageConverter {
         return instance;
     }
 
-    public String convert(String spinner) {
+    private void initializeMap(Context context) {
+       String [] languages = context.getResources().getStringArray(R.array.languages);
+       String [] languagesCodes = context.getResources().getStringArray(R.array.languageCodes);
+        for (int i = 0; i < languages.length; i++) {
+            languageToCode.put(languages[i], languagesCodes[i]);
+        }
+    }
+
+    public String convert(Context context, String spinner) {
+        if (languageToCode.isEmpty())
+            initializeMap(context);
         return languageToCode.get(spinner);
     }
 
