@@ -1,4 +1,4 @@
-package com.v1sar.yandextranslator;
+package com.v1sar.yandextranslator.Views;
 
 
 import android.database.Cursor;
@@ -18,6 +18,11 @@ import android.widget.Toast;
 import com.v1sar.yandextranslator.Adapters.TranslatedWordsAdapter;
 import com.v1sar.yandextranslator.Data.WordsContract;
 import com.v1sar.yandextranslator.Data.WordsDbHelper;
+import com.v1sar.yandextranslator.R;
+import com.v1sar.yandextranslator.TranslatedWord;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +31,14 @@ import java.util.List;
  * Created by qwerty on 28.03.17.
  */
 
-public class HistoryFragment extends Fragment implements TranslatorFragment.NewData{
+public class HistoryFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private TranslatedWordsAdapter wAdapter;
     private List<TranslatedWord> wordsList = new ArrayList<>();
     private WordsDbHelper wordsDbHelper;
     private Button btn;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Nullable
     @Override
@@ -45,20 +51,12 @@ public class HistoryFragment extends Fragment implements TranslatorFragment.NewD
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
         wAdapter = new TranslatedWordsAdapter(wordsList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(wAdapter);
         wordsDbHelper = WordsDbHelper.getInstance(getActivity());
         showDB();
-//        btn = (Button) getActivity().findViewById(R.id.buttonTest);
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showDB();
-//            }
-//        });
-       // prepareData();
     }
 
     public void showDB() {
@@ -77,7 +75,7 @@ public class HistoryFragment extends Fragment implements TranslatorFragment.NewD
                 null,                  // значения для условия WHERE
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
-                null);                   // порядок сортировки
+                WordsContract.WordEntry._ID + " DESC");                   // порядок сортировки
 
         int idColumnIndex = cursor.getColumnIndex(WordsContract.WordEntry._ID);
         int wordColumnIndex = cursor.getColumnIndex(WordsContract.WordEntry.COLUMN_WORD);
@@ -96,10 +94,26 @@ public class HistoryFragment extends Fragment implements TranslatorFragment.NewD
         wAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void updateView() {
-        showDB();
+
+    @Subscribe()
+    public void onNewWordTranslated(TranslatorFragment.NewWordTranslated event) {
+        wordsList.add(0, new TranslatedWord(event.word, event.translation, event.dir));
+        wAdapter.notifyItemInserted(0);
+        mLayoutManager.scrollToPosition(0);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
 //    private void prepareData(){
 //        wordsList.add(new TranslatedWord("hello", "lol", "en-ru"));
 //        wordsList.add(new TranslatedWord("5hello", "lo1l", "en-ru"));

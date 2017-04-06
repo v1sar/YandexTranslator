@@ -1,6 +1,7 @@
-package com.v1sar.yandextranslator;
+package com.v1sar.yandextranslator.Views;
 
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -16,9 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
+import com.v1sar.yandextranslator.Answer;
+import com.v1sar.yandextranslator.ApiService;
 import com.v1sar.yandextranslator.Data.WordsContract;
 import com.v1sar.yandextranslator.Data.WordsDbHelper;
 import com.v1sar.yandextranslator.Helpers.LanguageConverter;
+import com.v1sar.yandextranslator.R;
+import com.v1sar.yandextranslator.RetroClient;
+
+import org.greenrobot.eventbus.EventBus;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +45,7 @@ public class TranslatorFragment extends Fragment {
     SearchableSpinner leftSpinner;
     SearchableSpinner rightSpinner;
     WordsDbHelper wordsDbHelper;
+
 
     @Nullable
     @Override
@@ -70,6 +78,11 @@ public class TranslatorFragment extends Fragment {
         call.enqueue(new Callback<Answer>() {
             @Override
             public void onResponse(Call<Answer> call, Response<Answer> response) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 if(response.isSuccessful()) {
                     Toast.makeText(getActivity(), "GREAT", Toast.LENGTH_SHORT).show();
                     txtTranslated.setText(response.body().getText()[0]);
@@ -93,10 +106,19 @@ public class TranslatorFragment extends Fragment {
         values.put(WordsContract.WordEntry.COLUMN_DIRECTION, dir);
         values.put(WordsContract.WordEntry.COLUMN_FAVOURITE, 0);
         long newRowId = db.insert(WordsContract.WordEntry.TABLE_NAME, null, values);
-        //updateView();
+        EventBus.getDefault().post(new NewWordTranslated(word, translation, dir));
     }
 
-    interface NewData {
-        void updateView();
+
+    static class NewWordTranslated {
+        String word;
+        String translation;
+        String dir;
+
+        NewWordTranslated(String word, String translation, String dir) {
+            this.word = word;
+            this.translation = translation;
+            this.dir = dir;
+        }
     }
 }

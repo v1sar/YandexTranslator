@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.v1sar.yandextranslator.HistoryFragment;
-import com.v1sar.yandextranslator.TranslatorFragment;
+import com.v1sar.yandextranslator.Views.HistoryFragment;
+import com.v1sar.yandextranslator.Views.TranslatorFragment;
 
 /**
  * Created by qwerty on 28.03.17.
