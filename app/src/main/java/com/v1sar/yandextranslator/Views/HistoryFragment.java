@@ -13,13 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.v1sar.yandextranslator.Adapters.TranslatedWordsAdapter;
 import com.v1sar.yandextranslator.Data.WordsContract;
 import com.v1sar.yandextranslator.Data.WordsDbHelper;
 import com.v1sar.yandextranslator.R;
-import com.v1sar.yandextranslator.TranslatedWord;
+import com.v1sar.yandextranslator.Helpers.TranslatedWord;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -84,12 +83,18 @@ public class HistoryFragment extends Fragment {
         int favColumnIndex = cursor.getColumnIndex(WordsContract.WordEntry.COLUMN_FAVOURITE);
 
         while (cursor.moveToNext()) {
+            boolean isFav = false;
             int currentID = cursor.getInt(idColumnIndex);
             String currentWord = cursor.getString(wordColumnIndex);
             String currentTranslate = cursor.getString(translatedColumnIndex);
             String currentDir = cursor.getString(dirColumnIndex);
             int currentFav = cursor.getInt(favColumnIndex);
-            wordsList.add(new TranslatedWord(currentWord, currentTranslate, currentDir));
+            if (currentFav == 0) {
+                isFav = false;
+            } else {
+                isFav = true;
+            }
+            wordsList.add(new TranslatedWord(currentWord, currentTranslate, currentDir, isFav));
         }
         wAdapter.notifyDataSetChanged();
     }
@@ -97,7 +102,7 @@ public class HistoryFragment extends Fragment {
 
     @Subscribe()
     public void onNewWordTranslated(TranslatorFragment.NewWordTranslated event) {
-        wordsList.add(0, new TranslatedWord(event.word, event.translation, event.dir));
+        wordsList.add(0, new TranslatedWord(event.word, event.translation, event.dir, false));
         wAdapter.notifyItemInserted(0);
         mLayoutManager.scrollToPosition(0);
     }

@@ -4,10 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.v1sar.yandextranslator.R;
-import com.v1sar.yandextranslator.TranslatedWord;
+import com.v1sar.yandextranslator.Helpers.TranslatedWord;
 
 import java.util.List;
 
@@ -19,14 +22,26 @@ public class TranslatedWordsAdapter extends RecyclerView.Adapter<TranslatedWords
 
     private List<TranslatedWord> wordsList;
 
-    class WordViewHolder extends RecyclerView.ViewHolder {
+    class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView toTranslate, translated, direction;
+        private CheckBox isFav;
 
         WordViewHolder(View view) {
             super(view);
             toTranslate = (TextView) view.findViewById(R.id.word_to_translate);
             translated = (TextView) view.findViewById(R.id.translated_word);
             direction = (TextView) view.findViewById(R.id.translate_dir);
+            isFav = (CheckBox) view.findViewById(R.id.favourite_word);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            //Toast.makeText(view.getContext(), "position = " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+            isFav.setChecked(!isFav.isChecked());
+            TranslatedWord tempWord = wordsList.get(getAdapterPosition());
+            tempWord.setFavourite(isFav.isChecked());
+            wordsList.set(getAdapterPosition(), tempWord);
         }
     }
 
@@ -38,16 +53,16 @@ public class TranslatedWordsAdapter extends RecyclerView.Adapter<TranslatedWords
     public TranslatedWordsAdapter.WordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.translated_row, parent, false);
-
         return new WordViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(TranslatedWordsAdapter.WordViewHolder holder, int position) {
-        TranslatedWord word = wordsList.get(position);
+        final TranslatedWord word = wordsList.get(position);
         holder.toTranslate.setText(word.getWordToTranslate());
         holder.translated.setText(word.getTranslatedWord());
         holder.direction.setText(word.getTranslateDirection());
+        holder.isFav.setChecked(word.isFavSelected());
     }
 
     @Override

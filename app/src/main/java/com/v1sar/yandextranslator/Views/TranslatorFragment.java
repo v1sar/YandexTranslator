@@ -1,7 +1,6 @@
 package com.v1sar.yandextranslator.Views;
 
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -17,13 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
-import com.v1sar.yandextranslator.Answer;
-import com.v1sar.yandextranslator.ApiService;
+import com.v1sar.yandextranslator.Internet.Answer;
+import com.v1sar.yandextranslator.Internet.ApiService;
 import com.v1sar.yandextranslator.Data.WordsContract;
 import com.v1sar.yandextranslator.Data.WordsDbHelper;
 import com.v1sar.yandextranslator.Helpers.LanguageConverter;
 import com.v1sar.yandextranslator.R;
-import com.v1sar.yandextranslator.RetroClient;
+import com.v1sar.yandextranslator.Internet.RetroClient;
 
 import org.greenrobot.eventbus.EventBus;
 

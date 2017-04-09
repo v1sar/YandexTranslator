@@ -1,4 +1,4 @@
-package com.v1sar.yandextranslator;
+package com.v1sar.yandextranslator.Internet;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

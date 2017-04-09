@@ -1,4 +1,6 @@
-package com.v1sar.yandextranslator;
+package com.v1sar.yandextranslator.Internet;
+
+import com.v1sar.yandextranslator.Internet.ApiService;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
