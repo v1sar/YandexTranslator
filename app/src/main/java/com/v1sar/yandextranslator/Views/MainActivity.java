@@ -16,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Translate"));
-        tabLayout.addTab(tabLayout.newTab().setText("History"));
-        tabLayout.addTab(tabLayout.newTab().setText("Favourite"));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.translate_tab)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.history_tab)));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.favourite_tab)));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -31,16 +31,10 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
-
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
+            public void onTabUnselected(TabLayout.Tab tab) {}
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
     }
 }

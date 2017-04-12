@@ -35,10 +35,12 @@
         android:id="@+id/btn_translate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text_to_translate"/>
+        android:layout_below="@id/text_to_translate"
+        android:text="@string/btn_translate"/>
     <TextView
         android:id="@+id/txt_translated"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btn_translate"/>
+        android:layout_below="@id/btn_translate"
+        android:textSize="16sp"/>
 </RelativeLayout>

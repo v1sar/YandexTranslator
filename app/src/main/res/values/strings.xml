@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">YandexTranslator</string>
     <string name="hint_to_translate">Input text here</string>
+    <string name="btn_translate">Translate</string>
+    <string name="internet_issue">Check internet connection</string>
+    <string name="translated_ok">Translated</string>
+    <string name="translate_tab">Translate</string>
+    <string name="history_tab">History</string>
+    <string name="favourite_tab">Favourite</string>
+    <string name="API_KEY">trnsl.1.1.20170319T210150Z.f957fb7c5aa69a04.aa08dbf2c63ea7557971c4902005270c45eeb94b</string>
     <string-array name="languages">
         <item>Azerbaijan</item>
         <item>Albanian</item>

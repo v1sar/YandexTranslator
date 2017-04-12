@@ -8,15 +8,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 //import android.support.v7.widget.AppCompatSpinner;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
+import com.v1sar.yandextranslator.Helpers.PreferenceHelper;
 import com.v1sar.yandextranslator.Helpers.TranslatedWord;
 import com.v1sar.yandextranslator.Internet.Answer;
 import com.v1sar.yandextranslator.Internet.ApiService;
@@ -38,7 +41,7 @@ import retrofit2.Response;
 
 public class TranslatorFragment extends Fragment {
 
-    private static final String API_KEY = "trnsl.1.1.20170319T210150Z.f957fb7c5aa69a04.aa08dbf2c63ea7557971c4902005270c45eeb94b";
+    private static String API_KEY;
 
     Button btnTranslate;
     EditText txtEdit;
@@ -46,7 +49,7 @@ public class TranslatorFragment extends Fragment {
     SearchableSpinner leftSpinner;
     SearchableSpinner rightSpinner;
     WordsDbHelper wordsDbHelper;
-
+    PreferenceHelper preferenceHelper;
 
     @Nullable
     @Override
@@ -57,6 +60,10 @@ public class TranslatorFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        API_KEY = getResources().getString(R.string.API_KEY);
+        PreferenceHelper.getInstance().init(getActivity());
+        preferenceHelper = PreferenceHelper.getInstance();
         txtTranslated = (TextView) getActivity().findViewById(R.id.txt_translated);
         btnTranslate = (Button) getActivity().findViewById(R.id.btn_translate);
         txtEdit = (EditText) getActivity().findViewById(R.id.text_to_translate);
@@ -69,6 +76,8 @@ public class TranslatorFragment extends Fragment {
             }
         });
         wordsDbHelper = WordsDbHelper.getInstance(getActivity());
+        leftSpinner.setSelection(preferenceHelper.getInteger("leftSpinner"));
+        rightSpinner.setSelection(preferenceHelper.getInteger("rightSpinner"));
     }
 
         private void translate(final String word) {
@@ -81,17 +90,17 @@ public class TranslatorFragment extends Fragment {
                     @Override
                     public void onResponse(Call<Answer> call, Response<Answer> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(getActivity(), "GREAT", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), getResources().getString(R.string.translated_ok), Toast.LENGTH_SHORT).show();
                             txtTranslated.setText(response.body().getText()[0]);
                             insertWord(word, response.body().getText()[0], leftSpinnerDir + '-' + rightSpinnerDir);
                         } else {
-                            Toast.makeText(getActivity(), "NOT GREAT", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "ERRORS", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Answer> call, Throwable t) {
-                        Toast.makeText(getActivity(), "ERROR", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResources().getString(R.string.internet_issue), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -124,8 +133,7 @@ public class TranslatorFragment extends Fragment {
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
                 null);                   // порядок сортировки
-
-        while (cursor.moveToNext()) {
+        if (cursor.moveToNext()) {
             int translatedColumnIndex = cursor.getColumnIndex(WordsContract.WordEntry.COLUMN_TRANSLATED);
             String currentTranslate = cursor.getString(translatedColumnIndex);
             txtTranslated.setText(currentTranslate);
@@ -133,7 +141,6 @@ public class TranslatorFragment extends Fragment {
         }
         return false;
     }
-
 
     static class NewWordTranslated {
         String word;
@@ -146,4 +153,28 @@ public class TranslatorFragment extends Fragment {
             this.dir = dir;
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putCharSequence("translate", txtTranslated.getText());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        try {
+            txtTranslated.setText(savedInstanceState.getCharSequence("translate"));
+        } catch (NullPointerException e) {
+            Log.d(getActivity().getLocalClassName(), "error while tried to restore instance state");
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        preferenceHelper.putInteger("leftSpinner", leftSpinner.getSelectedItemPosition());
+        preferenceHelper.putInteger("rightSpinner", rightSpinner.getSelectedItemPosition());
+    }
+
 }
