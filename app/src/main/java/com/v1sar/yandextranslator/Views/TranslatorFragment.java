@@ -2,6 +2,7 @@ package com.v1sar.yandextranslator.Views;
 
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
+import com.v1sar.yandextranslator.Helpers.TranslatedWord;
 import com.v1sar.yandextranslator.Internet.Answer;
 import com.v1sar.yandextranslator.Internet.ApiService;
 import com.v1sar.yandextranslator.Data.WordsContract;
@@ -73,23 +75,26 @@ public class TranslatorFragment extends Fragment {
         ApiService api = RetroClient.getApiService();
         final String leftSpinnerDir = LanguageConverter.getInstance().convert(getActivity(), leftSpinner.getSelectedItem().toString());
         final String rightSpinnerDir = LanguageConverter.getInstance().convert(getActivity(), rightSpinner.getSelectedItem().toString());
-        Call<Answer> call = api.getMyJSON(API_KEY, word, leftSpinnerDir+"-"+rightSpinnerDir);
-        call.enqueue(new Callback<Answer>() {
-            @Override
-            public void onResponse(Call<Answer> call, Response<Answer> response) {
-                if(response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "GREAT", Toast.LENGTH_SHORT).show();
-                    txtTranslated.setText(response.body().getText()[0]);
-                    insertWord(word, response.body().getText()[0], leftSpinnerDir+'-'+rightSpinnerDir);
-                } else {
-                    Toast.makeText(getActivity(), "NOT GREAT", Toast.LENGTH_SHORT).show();
-                }
+        if (!checkWordInDb(word, leftSpinnerDir+"-"+rightSpinnerDir)) {
+                Call<Answer> call = api.getMyJSON(API_KEY, word, leftSpinnerDir + "-" + rightSpinnerDir);
+                call.enqueue(new Callback<Answer>() {
+                    @Override
+                    public void onResponse(Call<Answer> call, Response<Answer> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getActivity(), "GREAT", Toast.LENGTH_SHORT).show();
+                            txtTranslated.setText(response.body().getText()[0]);
+                            insertWord(word, response.body().getText()[0], leftSpinnerDir + '-' + rightSpinnerDir);
+                        } else {
+                            Toast.makeText(getActivity(), "NOT GREAT", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Answer> call, Throwable t) {
+                        Toast.makeText(getActivity(), "ERROR", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-            @Override
-            public void onFailure(Call<Answer> call, Throwable t) {
-                Toast.makeText(getActivity(), "ERROR", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void insertWord(String word, String translation, String dir) {
@@ -101,6 +106,32 @@ public class TranslatorFragment extends Fragment {
         values.put(WordsContract.WordEntry.COLUMN_FAVOURITE, 0);
         long newRowId = db.insert(WordsContract.WordEntry.TABLE_NAME, null, values);
         EventBus.getDefault().post(new NewWordTranslated(word, translation, dir));
+    }
+
+    private boolean checkWordInDb(String word, String dir) {
+        SQLiteDatabase db = wordsDbHelper.getReadableDatabase();
+        String[] projection = {
+                WordsContract.WordEntry._ID,
+                WordsContract.WordEntry.COLUMN_WORD,
+                WordsContract.WordEntry.COLUMN_TRANSLATED,
+                WordsContract.WordEntry.COLUMN_DIRECTION,
+                WordsContract.WordEntry.COLUMN_FAVOURITE};
+        Cursor cursor = db.query(
+                WordsContract.WordEntry.TABLE_NAME,   // таблица
+                projection,            // столбцы
+                WordsContract.WordEntry.COLUMN_WORD+"=? AND "+ WordsContract.WordEntry.COLUMN_DIRECTION+"=?",  // столбцы для условия WHERE
+                new String[] { word, dir },    // значения для условия WHERE
+                null,                  // Don't group the rows
+                null,                  // Don't filter by row groups
+                null);                   // порядок сортировки
+
+        while (cursor.moveToNext()) {
+            int translatedColumnIndex = cursor.getColumnIndex(WordsContract.WordEntry.COLUMN_TRANSLATED);
+            String currentTranslate = cursor.getString(translatedColumnIndex);
+            txtTranslated.setText(currentTranslate);
+            return true;
+        }
+        return false;
     }
 
 
