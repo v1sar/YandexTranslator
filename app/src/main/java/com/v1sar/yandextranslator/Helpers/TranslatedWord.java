@@ -10,6 +10,7 @@ public class TranslatedWord {
     private String translateDirection;
     private boolean isFavourite;
 
+
     public TranslatedWord() {
     }
 
@@ -50,5 +51,9 @@ public class TranslatedWord {
 
     public void setFavourite(boolean favourite) {
         isFavourite = favourite;
+    }
+
+    public int favToInt() {
+        return isFavourite?1:0;
     }
 }

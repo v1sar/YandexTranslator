@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Translate"));
         tabLayout.addTab(tabLayout.newTab().setText("History"));
+        tabLayout.addTab(tabLayout.newTab().setText("Favourite"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);

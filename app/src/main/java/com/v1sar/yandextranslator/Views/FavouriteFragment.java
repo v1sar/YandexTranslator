@@ -1,11 +1,10 @@
 package com.v1sar.yandextranslator.Views;
 
-
+import android.support.v4.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +17,8 @@ import com.v1sar.yandextranslator.Adapters.FavouriteWordsAdapter;
 import com.v1sar.yandextranslator.Adapters.TranslatedWordsAdapter;
 import com.v1sar.yandextranslator.Data.WordsContract;
 import com.v1sar.yandextranslator.Data.WordsDbHelper;
-import com.v1sar.yandextranslator.R;
 import com.v1sar.yandextranslator.Helpers.TranslatedWord;
+import com.v1sar.yandextranslator.R;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,14 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by qwerty on 28.03.17.
+ * Created by qwerty on 12.04.17.
  */
 
-public class HistoryFragment extends Fragment {
+public class FavouriteFragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private TranslatedWordsAdapter wAdapter;
-    private List<TranslatedWord> wordsList = new ArrayList<>();
+    private FavouriteWordsAdapter wAdapter;
+    private List<TranslatedWord> wordsListFav = new ArrayList<>();
     private WordsDbHelper wordsDbHelper;
     private Button btn;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -43,14 +42,14 @@ public class HistoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.history_fragment, container, false);
+        return inflater.inflate(R.layout.favourite_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view_hist);
-        wAdapter = new TranslatedWordsAdapter(wordsList, getActivity());
+        recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view_fav);
+        wAdapter = new FavouriteWordsAdapter(wordsListFav, getActivity());
         mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -71,8 +70,8 @@ public class HistoryFragment extends Fragment {
         Cursor cursor = db.query(
                 WordsContract.WordEntry.TABLE_NAME,   // таблица
                 projection,            // столбцы
-                null,                  // столбцы для условия WHERE
-                null,                  // значения для условия WHERE
+                WordsContract.WordEntry.COLUMN_FAVOURITE+"= ?",                  // столбцы для условия WHERE
+                new String[] {Integer.toString(1)},                  // значения для условия WHERE
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
                 WordsContract.WordEntry._ID + " DESC");                   // порядок сортировки
@@ -95,15 +94,15 @@ public class HistoryFragment extends Fragment {
             } else {
                 isFav = true;
             }
-            wordsList.add(new TranslatedWord(currentWord, currentTranslate, currentDir, isFav));
+            wordsListFav.add(new TranslatedWord(currentWord, currentTranslate, currentDir, isFav));
         }
         wAdapter.notifyDataSetChanged();
     }
 
 
     @Subscribe()
-    public void onNewWordTranslated(TranslatorFragment.NewWordTranslated event) {
-        wordsList.add(0, new TranslatedWord(event.word, event.translation, event.dir, false));
+    public void onNewWordFavourite(TranslatedWordsAdapter.NewWordFavourite event) {
+        wordsListFav.add(0, new TranslatedWord(event.word, event.translation, event.dir, true));
         wAdapter.notifyItemInserted(0);
         mLayoutManager.scrollToPosition(0);
     }
@@ -111,16 +110,15 @@ public class HistoryFragment extends Fragment {
     @Subscribe()
     public void onNewWordUnFavourite(FavouriteWordsAdapter.NewWordUnFavourite event) {
         TranslatedWord tempWord = null;
-        for(TranslatedWord word : wordsList) {
+        for(TranslatedWord word : wordsListFav) {
             if (word.getWordToTranslate().equals(event.word) && word.getTranslatedWord().equals(event.translation) && word.getTranslateDirection().equals(event.dir)) {
                 tempWord = word;
                 break;
             }
         }
-        int i = wordsList.indexOf(tempWord);
-        tempWord.setFavourite(false);
-        wordsList.set(i, tempWord);
-        wAdapter.notifyItemChanged(i);
+        int i = wordsListFav.indexOf(tempWord);
+        wordsListFav.remove(i);
+        wAdapter.notifyItemRemoved(i);
     }
 
     @Override

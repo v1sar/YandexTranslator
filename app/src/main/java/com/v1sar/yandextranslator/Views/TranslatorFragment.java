@@ -77,11 +77,6 @@ public class TranslatorFragment extends Fragment {
         call.enqueue(new Callback<Answer>() {
             @Override
             public void onResponse(Call<Answer> call, Response<Answer> response) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 if(response.isSuccessful()) {
                     Toast.makeText(getActivity(), "GREAT", Toast.LENGTH_SHORT).show();
                     txtTranslated.setText(response.body().getText()[0]);

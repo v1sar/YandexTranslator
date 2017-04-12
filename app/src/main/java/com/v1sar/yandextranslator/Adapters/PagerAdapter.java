@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.v1sar.yandextranslator.Views.FavouriteFragment;
 import com.v1sar.yandextranslator.Views.HistoryFragment;
 import com.v1sar.yandextranslator.Views.TranslatorFragment;
 
@@ -29,6 +30,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 HistoryFragment tab2 = new HistoryFragment();
                 return tab2;
+            case 2:
+                FavouriteFragment tab3 = new FavouriteFragment();
+                return tab3;
             default:
                 return null;
         }

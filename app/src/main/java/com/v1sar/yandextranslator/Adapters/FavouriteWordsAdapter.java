@@ -8,26 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.v1sar.yandextranslator.Data.WordsContract;
 import com.v1sar.yandextranslator.Data.WordsDbHelper;
-import com.v1sar.yandextranslator.R;
 import com.v1sar.yandextranslator.Helpers.TranslatedWord;
-import com.v1sar.yandextranslator.Views.TranslatorFragment;
+import com.v1sar.yandextranslator.R;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
 /**
- * Created by qwerty on 28.03.17.
+ * Created by qwerty on 12.04.17.
  */
 
-public class TranslatedWordsAdapter extends RecyclerView.Adapter<TranslatedWordsAdapter.WordViewHolder> {
-
+public class FavouriteWordsAdapter extends RecyclerView.Adapter<FavouriteWordsAdapter.WordViewHolder>{
     private List<TranslatedWord> wordsList;
     private Context context;
 
@@ -58,30 +54,25 @@ public class TranslatedWordsAdapter extends RecyclerView.Adapter<TranslatedWords
             db.update(WordsContract.WordEntry.TABLE_NAME,
                     values,
                     "word = ? AND translated = ? AND direction = ?",
-                    new String[]{tempWord.getWordToTranslate(), tempWord.getTranslatedWord(), tempWord.getTranslateDirection()});
-            if (isFav.isChecked()) {
-                EventBus.getDefault().post(new NewWordFavourite(tempWord.getWordToTranslate(), tempWord.getTranslatedWord(), tempWord.getTranslateDirection()));
-            } else {
-                EventBus.getDefault().post(new FavouriteWordsAdapter.NewWordUnFavourite(tempWord.getWordToTranslate(), tempWord.getTranslatedWord(), tempWord.getTranslateDirection()));
-            }
+                    new String[] {tempWord.getWordToTranslate(), tempWord.getTranslatedWord(), tempWord.getTranslateDirection()});
+            EventBus.getDefault().post(new NewWordUnFavourite(tempWord.getWordToTranslate(), tempWord.getTranslatedWord(), tempWord.getTranslateDirection()));
         }
-
     }
 
-    public TranslatedWordsAdapter(List<TranslatedWord> wordsList, Context context) {
+    public FavouriteWordsAdapter(List<TranslatedWord> wordsList, Context context) {
         this.wordsList = wordsList;
         this.context = context;
     }
 
     @Override
-    public TranslatedWordsAdapter.WordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FavouriteWordsAdapter.WordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.translated_row, parent, false);
-        return new WordViewHolder(itemView);
+        return new FavouriteWordsAdapter.WordViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(TranslatedWordsAdapter.WordViewHolder holder, int position) {
+    public void onBindViewHolder(FavouriteWordsAdapter.WordViewHolder holder, int position) {
         final TranslatedWord word = wordsList.get(position);
         holder.toTranslate.setText(word.getWordToTranslate());
         holder.translated.setText(word.getTranslatedWord());
@@ -94,17 +85,15 @@ public class TranslatedWordsAdapter extends RecyclerView.Adapter<TranslatedWords
         return wordsList.size();
     }
 
-
-    public static class NewWordFavourite {
+    public static class NewWordUnFavourite {
         public String word;
         public String translation;
         public String dir;
 
-        NewWordFavourite(String word, String translation, String dir) {
+        NewWordUnFavourite(String word, String translation, String dir) {
             this.word = word;
             this.translation = translation;
             this.dir = dir;
         }
     }
-
 }
