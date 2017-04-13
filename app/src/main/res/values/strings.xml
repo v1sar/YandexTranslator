@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YandexTranslator</string>
+    <string name="app_name" translatable="false">YandexTranslator</string>
     <string name="hint_to_translate">Input text here</string>
     <string name="btn_translate">Translate</string>
     <string name="internet_issue">Check internet connection</string>
@@ -7,7 +7,15 @@
     <string name="translate_tab">Translate</string>
     <string name="history_tab">History</string>
     <string name="favourite_tab">Favourite</string>
-    <string name="API_KEY">trnsl.1.1.20170319T210150Z.f957fb7c5aa69a04.aa08dbf2c63ea7557971c4902005270c45eeb94b</string>
+    <string name="API_KEY" translatable="false">trnsl.1.1.20170319T210150Z.f957fb7c5aa69a04.aa08dbf2c63ea7557971c4902005270c45eeb94b</string>
+    <string name="powered_by_yandex_translate">Powered by Yandex Translate \nhttp://translate.yandex.com/</string>
+    <string name="error_400" translatable="false">Bad request</string>
+    <string name="error_401">Invalid API key</string>
+    <string name="error_402">Blocked API key</string>
+    <string name="error_404">Exceeded the daily limit on the amount of translated text</string>
+    <string name="error_413">Exceeded the maximum text size</string>
+    <string name="error_422">The text cannot be translated</string>
+    <string name="error_501">The specified translation direction is not supported</string>
     <string-array name="languages">
         <item>Azerbaijan</item>
         <item>Albanian</item>
@@ -101,96 +109,95 @@
         <item>Japanese</item>
     </string-array>
     <string-array name="languageCodes">
-        <item>az
-</item> <item>sq
-</item> <item>am
-</item> <item>en
-</item> <item>ar
-</item> <item>hy
-</item> <item>af
-</item> <item>eu
-</item> <item>ba
-</item> <item>be
-</item> <item>bn
-</item> <item>bg
-</item> <item>bs
-</item> <item>cy
-</item> <item>hu
-</item> <item>vi
-</item> <item>ht
-</item> <item>gl
-</item> <item>nl
-</item> <item>mrj
-</item> <item>el
-</item> <item>ka
-</item> <item>gu
-</item> <item>da
-</item> <item>he
-</item> <item>yi
-</item> <item>id
-</item> <item>ga
-</item> <item>it
-</item> <item>is
-</item> <item>es
-</item> <item>kk
-</item> <item>kn
-</item> <item>ca
-</item> <item>ky
-</item> <item>zh
-</item> <item>ko
-</item> <item>xh
-</item> <item>la
-</item> <item>lv
-</item> <item>lt
-</item> <item>lb
-</item> <item>mg
-</item> <item>ms
-</item> <item>ml
-</item> <item>mt
-</item> <item>mk
-</item> <item>mi
-</item> <item>mr
-</item> <item>mhr
-</item> <item>mn
-</item> <item>de
-</item> <item>ne
-</item> <item>no
-</item> <item>pa
-</item> <item>pap
-</item> <item>fa
-</item> <item>pl
-</item> <item>pt
-</item> <item>ro
-</item> <item>ru
-</item> <item>ceb
-</item> <item>sr
-</item> <item>si
-</item> <item>sk
-</item> <item>sl
-</item> <item>sw
-</item> <item>su
-</item> <item>tg
-</item> <item>th
-</item> <item>tl
-</item> <item>ta
-</item> <item>tt
-</item> <item>te
-</item> <item>tr
-</item> <item>udm
-</item> <item>uz
-</item> <item>uk
-</item> <item>ur
-</item> <item>fi
-</item> <item>fr
-</item> <item>hi
-</item> <item>hr
-</item> <item>cs
-</item> <item>sv
-</item> <item>gd
-</item> <item>et
-</item> <item>eo
-</item> <item>jv
-</item> <item>ja
-</item>
+        <item>az</item>
+        <item>sq</item>
+        <item>am</item>
+        <item>en</item>
+        <item>ar</item>
+        <item>hy</item>
+        <item>af</item>
+        <item>eu</item>
+        <item>ba</item>
+        <item>be</item>
+        <item>bn</item>
+        <item>bg</item>
+        <item>bs</item>
+        <item>cy</item>
+        <item>hu</item>
+        <item>vi</item>
+        <item>ht</item>
+        <item>gl</item>
+        <item>nl</item>
+        <item>mrj</item>
+        <item>el</item>
+        <item>ka</item>
+        <item>gu</item>
+        <item>da</item>
+        <item>he</item>
+        <item>yi</item>
+        <item>id</item>
+        <item>ga</item>
+        <item>it</item>
+        <item>is</item>
+        <item>es</item>
+        <item>kk</item>
+        <item>kn</item>
+        <item>ca</item>
+        <item>ky</item>
+        <item>zh</item>
+        <item>ko</item>
+        <item>xh</item>
+        <item>la</item>
+        <item>lv</item>
+        <item>lt</item>
+        <item>lb</item>
+        <item>mg</item>
+        <item>ms</item>
+        <item>ml</item>
+        <item>mt</item>
+        <item>mk</item>
+        <item>mi</item>
+        <item>mr</item>
+        <item>mhr</item>
+        <item>mn</item>
+        <item>de</item>
+        <item>ne</item>
+        <item>no</item>
+        <item>pa</item>
+        <item>pap</item>
+        <item>fa</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>ro</item>
+        <item>ru</item>
+        <item>ceb</item>
+        <item>sr</item>
+        <item>si</item>
+        <item>sk</item>
+        <item>sl</item>
+        <item>sw</item>
+        <item>su</item>
+        <item>tg</item>
+        <item>th</item>
+        <item>tl</item>
+        <item>ta</item>
+        <item>tt</item>
+        <item>te</item>
+        <item>tr</item>
+        <item>udm</item>
+        <item>uz</item>
+        <item>uk</item>
+        <item>ur</item>
+        <item>fi</item>
+        <item>fr</item>
+        <item>hi</item>
+        <item>hr</item>
+        <item>cs</item>
+        <item>sv</item>
+        <item>gd</item>
+        <item>et</item>
+        <item>eo</item>
+        <item>jv</item>
+        <item>ja</item>
     </string-array>
 </resources>

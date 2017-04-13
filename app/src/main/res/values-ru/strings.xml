@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btn_translate">Перевести</string>
+    <string name="error_401">Неправильный API-ключ</string>
+    <string name="error_404">Превышено суточное ограничение на объем переведенного текста</string>
+    <string name="error_402">API-ключ заблокирован</string>
+    <string name="error_413">Превышен максимально допустимый размер текста</string>
+    <string name="error_422">Текст не может быть переведен</string>
+    <string name="error_501">Заданное направление перевода не поддерживается</string>
+    <string name="favourite_tab">Избранное</string>
+    <string name="hint_to_translate">Введите текст сюда</string>
+    <string name="history_tab">История</string>
+    <string name="internet_issue">Проверьте подключение к интернету</string>
+    <string name="powered_by_yandex_translate">Переведено сервисом «ЯндексПереводчик» http://translate.yandex.ru/</string>
+    <string name="translate_tab">Перевод</string>
+    <string name="translated_ok">Переведено</string>
+    <string-array name="languages">
+    <item>азербайджанский</item>
+        <item>албанский</item>
+        <item>амхарский</item>
+        <item>английский</item>
+        <item>арабский</item>
+        <item>армянский</item>
+        <item>африкаанс</item>
+        <item>баскский</item>
+        <item>башкирский</item>
+        <item>белорусский</item>
+        <item>бенгальский</item>
+        <item>болгарский</item>
+        <item>боснийский</item>
+        <item>валлийский</item>
+        <item>венгерский</item>
+        <item>вьетнамский</item>
+        <item>гаитянский (креольский)</item>
+        <item>галисийский</item>
+        <item>голландский</item>
+        <item>горномарийский</item>
+        <item>греческий</item>
+        <item>грузинский</item>
+        <item>гуджарати</item>
+        <item>датский</item>
+        <item>иврит</item>
+        <item>идиш</item>
+        <item>индонезийский</item>
+        <item>ирландский</item>
+        <item>итальянский</item>
+        <item>исландский</item>
+        <item>испанский</item>
+        <item>казахский</item>
+        <item>каннада</item>
+        <item>каталанский</item>
+        <item>киргизский</item>
+        <item>китайский</item>
+        <item>корейский</item>
+        <item>коса</item>
+        <item>латынь</item>
+        <item>латышский</item>
+        <item>литовский</item>
+        <item>люксембургский</item>
+        <item>малагасийский</item>
+        <item>малайский</item>
+        <item>малаялам</item>
+        <item>мальтийский</item>
+        <item>македонский</item>
+        <item>маори</item>
+        <item>маратхи</item>
+        <item>марийский</item>
+        <item>монгольский</item>
+        <item>немецкий</item>
+        <item>непальский</item>
+        <item>норвежский</item>
+        <item>панджаби</item>
+        <item>папьяменто</item>
+        <item>персидский</item>
+        <item>польский</item>
+        <item>португальский</item>
+        <item>румынский</item>
+        <item>русский</item>
+        <item>себуанский</item>
+        <item>сербский</item>
+        <item>сингальский</item>
+        <item>словацкий</item>
+        <item>словенский</item>
+        <item>суахили</item>
+        <item>сунданский</item>
+        <item>таджикский</item>
+        <item>тайский</item>
+        <item>тагальский</item>
+        <item>тамильский</item>
+        <item>татарский</item>
+        <item>телугу</item>
+        <item>турецкий</item>
+        <item>удмуртский</item>
+        <item>узбекский</item>
+        <item>украинский</item>
+        <item>урду</item>
+        <item>финский</item>
+        <item>французский</item>
+        <item>хинди</item>
+        <item>хорватский</item>
+        <item>чешский</item>
+        <item>шведский</item>
+        <item>шотландский</item>
+        <item>эстонский</item>
+        <item>эсперанто</item>
+        <item>яванский</item>
+        <item>японский</item>
+    </string-array>
+</resources>

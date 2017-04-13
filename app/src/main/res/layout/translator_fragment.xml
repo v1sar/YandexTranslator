@@ -38,6 +38,14 @@
         android:layout_below="@id/text_to_translate"
         android:text="@string/btn_translate"/>
     <TextView
+        android:id="@+id/copyright_yandex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/powered_by_yandex_translate"
+        android:autoLink="web"
+        android:layout_centerHorizontal="true"/>
+    <TextView
         android:id="@+id/txt_translated"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

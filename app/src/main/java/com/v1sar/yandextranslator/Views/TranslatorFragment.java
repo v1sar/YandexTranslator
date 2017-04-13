@@ -30,6 +30,7 @@ import com.v1sar.yandextranslator.R;
 import com.v1sar.yandextranslator.Internet.RetroClient;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -90,22 +91,45 @@ public class TranslatorFragment extends Fragment {
                     @Override
                     public void onResponse(Call<Answer> call, Response<Answer> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(getActivity(), getResources().getString(R.string.translated_ok), Toast.LENGTH_SHORT).show();
-                            txtTranslated.setText(response.body().getText()[0]);
-                            insertWord(word, response.body().getText()[0], leftSpinnerDir + '-' + rightSpinnerDir);
+                            if (isAdded()) Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.translated_ok), Toast.LENGTH_SHORT).show();
+                            insertWord(word, response.body().getText()[0], leftSpinnerDir + "-" + rightSpinnerDir);
                         } else {
-                            Toast.makeText(getActivity(), "ERRORS", Toast.LENGTH_SHORT).show();
+                            //обработка ошибок
+                            switch (response.code()){
+                                case 400:
+                                    if (isAdded()) Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.error_400), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 401:
+                                    if (isAdded()) Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.error_401), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 402:
+                                    if (isAdded()) Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.error_402), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 404:
+                                    if (isAdded()) Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.error_404), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 413:
+                                    if (isAdded()) Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.error_413), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 422:
+                                    if (isAdded()) Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.error_422), Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 501:
+                                    if (isAdded()) Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.error_501), Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Answer> call, Throwable t) {
-                        Toast.makeText(getActivity(), getResources().getString(R.string.internet_issue), Toast.LENGTH_SHORT).show();
+                        if (isAdded()) Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.internet_issue), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
     }
 
+    //вставка перевода в БД и рассылка события о новом переводе по eventbus
     private void insertWord(String word, String translation, String dir) {
         SQLiteDatabase db = wordsDbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -117,6 +141,7 @@ public class TranslatorFragment extends Fragment {
         EventBus.getDefault().post(new NewWordTranslated(word, translation, dir));
     }
 
+    //проверка наличия перевода в базе данных
     private boolean checkWordInDb(String word, String dir) {
         SQLiteDatabase db = wordsDbHelper.getReadableDatabase();
         String[] projection = {
@@ -170,11 +195,22 @@ public class TranslatorFragment extends Fragment {
         }
     }
 
+    @Subscribe()
+    public void onNewWordTranslated(TranslatorFragment.NewWordTranslated event) {
+        txtTranslated.setText(event.translation);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
     @Override
     public void onStop() {
         super.onStop();
         preferenceHelper.putInteger("leftSpinner", leftSpinner.getSelectedItemPosition());
         preferenceHelper.putInteger("rightSpinner", rightSpinner.getSelectedItemPosition());
+        EventBus.getDefault().unregister(this);
     }
-
 }
